@@ -1,0 +1,22 @@
+[{
+    "uid": 1,
+    "name": "Bob",
+    "favSkills": [1, 2, 3],
+    "interestSkulls": [4, 5],
+    "busyLevel": 0,
+    "recency": 0
+  }, {
+    "uid": 2,
+    "name": "Steve",
+    "favSkills": [6, 7],
+    "interestSkulls": [8, 9, 10],
+    "busyLevel": 0,
+    "recency": 0
+}, {
+    "uid": 3,
+    "name": "Janet",
+    "favSkills": [8, 3, 6],
+    "interestSkulls": [7, 2, 1],
+    "busyLevel": 0,
+    "recency": 0
+}]

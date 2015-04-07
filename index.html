@@ -1,0 +1,61 @@
+<html>
+<head>
+  <title>Peeps Picker 9000 Pro: hyper-agile rapid-scrum synergyacracy engine</title>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script src="main.js"></script>
+  <style>
+  </style>
+</head>
+<body>
+
+  <section id="branding">
+    <h1>Peeps Picker 9000 Pro<h1>
+    <h2>hyper-agile rapid-scrum synergyacracy engine<h2>
+  </section>
+
+  <section id="peeps-picker">
+    <form>
+      <label for="number" class="peeps-picker__label">Peeps?</label>
+      <select id="number" class="peeps-picker__select">
+        <option value="1">Just One</option>
+        <option value="2">Tidy Pair</option>
+        <option value="3">Tres Amigos</option>
+        <option value="4">Four Horsemen</option>
+        <option value="5">Five Wizards</option>
+        <option value="6">Geez Six!</option>
+        <option value="7">7777</option>
+        <option value="8">Qua? Eight!</option>
+      </select>
+
+      <fieldset>
+        <legend>Skills</legend>
+        <ul>
+          <li>
+            {{ skills }}
+            <label for="skills-sid-{{ sid }}" class="peeps-picker__label"></label>
+            <input type="checkbox" name="skills" value="1" id="skills-sid-{{ sid }}" class="peeps-picker__checkbox">
+            {{ /skills }}
+          </li>
+        </ul>
+      </fieldset>
+
+      <input type="submit" class="peeps-picker__button" value="Pick Whom">
+    </form>
+  </section>
+
+  <section>
+    <h1>Peeps<h2>
+
+    <ul id="peeps-list">
+  <!--     <li>
+        <h3 class="peeps-list__name">{{ name }}</h3>
+        <span class="peeps-list__label">Busy Level:</span> {{ busy }} <br>
+        <span class="peeps-list__label">Favorite Skill:</span> {{ favSkills }} <br>
+        <span class="peeps-list__label">Interested Skill:</span> {{ interestedSkills }}
+      </li> -->
+    </ul>
+  </section>
+
+</body>
+</html>
