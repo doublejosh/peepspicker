@@ -130,8 +130,10 @@ console.log(data.skills);
           def = new $.Deferred();
 
       // Find match score.
-      match += favSkillsMulti * _.intersection(peep.favSkills, data.skills).length;
-      match += intSkillsMulti * _.intersection(peep.intSkills, data.skills).length;
+      peep.favSkills = _.intersection(peep.favSkills, data.skills);
+      match += favSkillsMulti * peep.favSkills.length;
+      peep.intSkills = _.intersection(peep.intSkills, data.skills);
+      match += intSkillsMulti * peep.intSkills.length;
       _.extend(peep, {match: match});
 
 console.log('Skills...');
@@ -189,7 +191,7 @@ console.log(peeps);
 console.log('- - - - - - - - - - - - - - -');
 console.log(sortedPeeps);
 
-        // @tooo Always randomize among equal values.
+        // @todo Always randomize among equal values.
         deferred.resolve(sortedPeeps.slice(0, data.number));
       });
     });
