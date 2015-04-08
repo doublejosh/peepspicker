@@ -2,6 +2,7 @@
 <head>
   <title>Peeps Picker Pro 9000: hyper-agile, rapid-scrum, synergy-acracy engine</title>
   <link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     /* HTML */
     body {
@@ -9,15 +10,15 @@
       font-family: 'Press Start 2P', cursive;
       line-height: 1.25em;
       color: #333;
+      margin: 0;
+      padding: 10px;
     }
     section {
-      min-width: 480px;
+      min-width: 310px;
       max-width: 960px;
       margin: 1em auto;
-      padding: 1em;
+      padding: 1em 0;
       border-top: 1px dashed #999;
-      clear: both;
-      overflow: hidden;
     }
     section.first {
       border-top: none;
@@ -63,6 +64,11 @@
       width: 300px;
       float: left;
       margin: 0 2em 2em 0;
+    }
+    @media screen and ( max-width: 675px ) {
+      .peeps-branding__logo {
+        float: none;
+      }
     }
 
     /* Picker */
