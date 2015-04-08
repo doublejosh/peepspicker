@@ -1,4 +1,4 @@
-Peeps Picker 9000 Pro
+Peeps Picker Pro 9000
 ======================
 
 **Hyper-agile rapid-scrum synergy-acracy engine**
