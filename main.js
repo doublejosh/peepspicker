@@ -4,7 +4,7 @@
  */
 (function($, _) {
 
-  var favSkilsMulti = 1,
+  var favSkillsMulti = 1,
       intSkillsMulti = 0.5,
       randomizer = false;
 
@@ -89,16 +89,20 @@
      * @return {object}
      */
     function collectData() {
-      var data = {skills: []};
+      var data = {
+            skills: [],
+            randomizer: []
+          };
 
       $("#peeps-picker input, #peeps-picker select").each(function() {
-        var type = $(this).attr('type') || $(this).prop('tagName');
+        var type = $(this).attr('type') || $(this).prop('tagName'),
+            elmName = $(this).attr('name');
 
         switch(type) {
           case 'text':
           case 'TEXTAREA':
           case 'SELECT':
-            data[$(this).attr('name')] = $(this).val();
+            data[elmName] = $(this).val();
             break;
 
           case 'checkbox':
@@ -109,6 +113,9 @@
             break;
         }
       });
+
+console.log('REQUESTED...');
+console.log(data.skills);
 
       return data;
     }
@@ -123,9 +130,14 @@
           def = new $.Deferred();
 
       // Find match score.
-      match += favSkilsMulti * _.intersection(peep.favSkills, data.skills).length;
+      match += favSkillsMulti * _.intersection(peep.favSkills, data.skills).length;
       match += intSkillsMulti * _.intersection(peep.intSkills, data.skills).length;
       _.extend(peep, {match: match});
+
+console.log('Skills...');
+console.log(peep.favSkills);
+console.log(peep.intSkills);
+console.log('Match: ' + match);
 
       // Store max.
       maxMatch = (match > maxMatch) ? match : maxMatch;
@@ -134,6 +146,8 @@
       return def;
     }
 
+
+    // Load up the people.
     $.getJSON('peeps.json', function(peeps) {
 
       // Gather and compute match.
@@ -143,14 +157,27 @@
 
       // Compute change and pick.
       $.when.apply(this, deferredList).done(function() {
+
+console.log('Max : ' + maxMatch);
+
         $.each(peeps, function(i, peep) {
           var chance = peep.match / maxMatch;
 
+console.log('- - - - - - - - - - - - - - -');
+console.log('Name : ' + peep.name);
+console.log('Match : ' + peep.match);
+console.log('Chance : ' + chance);
+
           // Add some chance if desired.
-          if (randomizer === true) {
+          if (parseInt(data.randomizer) === 1) {
             chance = Math.random() * chance;
           }
-          this.chance = chance || 0;
+
+console.log('AFTER Chance : ' + chance);
+
+          this.chance = (Math.round(chance * 100) / 100) || 'none';
+
+console.log(this);
         });
 
         // Sort matches and send back.
@@ -163,6 +190,7 @@
   }
 
 
+  // Load that page!
   $(document).ready(function() {
     var $form = $('#peeps-picker form');
 
@@ -180,13 +208,10 @@
       $(this).addClass('isCollapsed');
       e.preventDefault();
     });
-
     $form.on('click', function () {
       if ($form.hasClass('isCollapsed')) $form.toggleClass('isCollapsed');
     });
-    $('#peeps-picker__opener').on('click', function(e) {
-      e.preventDefault();
-    });
+    $('#peeps-picker__opener').on('click', function(e) { e.preventDefault() });
 
   });
 
