@@ -44,7 +44,7 @@
 
 
       // Render nested.
-      $('#peeps-list').html(
+      $('#peeps-list ul').html(
         Mustache.to_html(
           $('#template-peeps').html(),
           {peeps: peeps},
@@ -175,13 +175,21 @@ console.log('Chance : ' + chance);
 
 console.log('AFTER Chance : ' + chance);
 
-          this.chance = (Math.round(chance * 100) / 100) || 'none';
-
+          chance = Math.round(chance * 100) / 100 || 0;
+          this.chance = String(chance);
 console.log(this);
         });
 
+console.log('- - - - - - - - - - - - - - -');
+console.log(peeps);
+
         // Sort matches and send back.
         sortedPeeps = _.sortBy(peeps, 'chance').reverse();
+
+console.log('- - - - - - - - - - - - - - -');
+console.log(sortedPeeps);
+
+        // @tooo Always randomize among equal values.
         deferred.resolve(sortedPeeps.slice(0, data.number));
       });
     });
