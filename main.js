@@ -69,6 +69,20 @@
 
 
   /**
+   * Turn match numbers into charts.
+   */
+  function makeCharts() {
+    $.each('.peeps-list__chance', function() {
+      var svg = d3.select(this).append("svg"),
+          t = textures.lines().heavier(this.chance * 10);
+
+      svg.call(t);
+      svg.append("circle").style("fill", t.url());
+    });
+  }
+
+
+  /**
    * Use form data to choose people.
    *
    * @param  {object} data
@@ -214,6 +228,7 @@ console.log(sortedPeeps);
     $form.on('submit', function (e) {
       $.when(processData()).done(function(data) {
         showPeeps(data);
+        makeCharts();
       });
       $(this).addClass('isCollapsed');
       e.preventDefault();
