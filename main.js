@@ -63,7 +63,7 @@
     $.getJSON('skills.json', function(json) {
       $('#skills').html(
         Mustache.render($('#template-skills').html(), {skills: json})
-      );
+      ).parents('form').garlic();
     });
   }
 
