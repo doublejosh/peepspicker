@@ -1,22 +1,36 @@
 [{
     "uid": 1,
     "name": "Bob",
-    "favSkills": [1, 2, 3],
-    "interestSkulls": [4, 5],
+    "favSkills": ["1", "15", "3"],
+    "intSkills": ["4", "5"],
     "busyLevel": 0,
     "recency": 0
   }, {
     "uid": 2,
     "name": "Steve",
-    "favSkills": [6, 7],
-    "interestSkulls": [8, 9, 10],
+    "favSkills": ["18", "7"],
+    "intSkills": ["8", "9", "10"],
     "busyLevel": 0,
     "recency": 0
 }, {
     "uid": 3,
     "name": "Janet",
-    "favSkills": [8, 3, 6],
-    "interestSkulls": [7, 2, 1],
+    "favSkills": ["8", "3", "6"],
+    "intSkills": ["13", "2", "1"],
+    "busyLevel": 0,
+    "recency": 0
+}, {
+    "uid": 4,
+    "name": "Susan",
+    "favSkills": ["2", "15", "17"],
+    "intSkills": ["11", "8", "4"],
+    "busyLevel": 0,
+    "recency": 0
+}, {
+    "uid": 5,
+    "name": "Jacque Soon Kim",
+    "favSkills": ["16", "13", "6"],
+    "intSkills": ["9", "2", "5"],
     "busyLevel": 0,
     "recency": 0
 }]

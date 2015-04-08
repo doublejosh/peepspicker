@@ -1,5 +1,8 @@
 [{
     "sid": 1,
+    "name": "Optimization/converstion/SEO"
+  },{
+    "sid": 2,
     "name": "PHP"
   }, {
     "sid": 3,
@@ -15,38 +18,38 @@
     "name": "Module building"
   }, {
     "sid": 7,
-    "name": "Performance Opt."
+    "name": "Performance optimization"
   }, {
     "sid": 8,
-    "name": "Refactor"
+    "name": "Refactors"
   }, {
     "sid": 9,
     "name": "CRM/Eloqua/SalesForce"
   }, {
     "sid": 10,
-    "name": "Totally New"
+    "name": "Totally new stuff"
   }, {
-    "sid": 10,
+    "sid": 11,
     "name": "Reserach"
   }, {
-    "sid": 10,
-    "name": "Tableau Vizzes"
+    "sid": 12,
+    "name": "Tableau vizzes"
   }, {
-    "sid": 10,
+    "sid": 13,
     "name": "Analytics"
   }, {
-    "sid": 10,
+    "sid": 14,
     "name": "Small site"
   }, {
-    "sid": 10,
-    "name": "Continous Integration"
+    "sid": 15,
+    "name": "Continous integration"
   }, {
-    "sid": 10,
-    "name": "Automated Testing"
+    "sid": 16,
+    "name": "Automated testing"
   }, {
-    "sid": 10,
+    "sid": 17,
     "name": "UX"
   }, {
-    "sid": 10,
-    "name": "Admin Experience"
+    "sid": 18,
+    "name": "Admin UX"
 }]

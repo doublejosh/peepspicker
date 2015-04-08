@@ -1,61 +1,212 @@
 <html>
 <head>
-  <title>Peeps Picker 9000 Pro: hyper-agile rapid-scrum synergyacracy engine</title>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-  <script src="main.js"></script>
+  <title>Peeps Picker Pro 9000: hyper-agile, rapid-scrum, synergy-acracy engine</title>
+  <link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
   <style>
+    /* HTML */
+    body, * {
+      font-size: 16px;
+      font-family: 'Press Start 2P', cursive;
+      line-height: 1.25em;
+      color: #333;
+    }
+    section {
+      min-width: 480px;
+      max-width: 960px;
+      margin: 1em auto;
+      padding: 1em;
+      border-bottom: 1px dashed #999;
+      clear: both;
+      overflow: hidden;
+    }
+    h1 {
+      font-size: 1.5em;
+      color: #F568E3;
+    }
+    h2 {
+      font-size: 1.125em;
+    }
+    h2, legend {
+      color: #4DB849;
+    }
+    h3 {
+      color: #5491CC;
+    }
+    fieldset {
+      margin: 1em 0;
+      border: 1px solid #ddd;
+    }
+
+    /* Common */
+    .peeps-picker,
+    .peeps-list {
+      font-size: 0.875em;
+    }
+
+    /* Branding */
+    .peeps-branding h2 {
+      color: #666;
+    }
+    .peeps-branding__logo {
+      width: 300px;
+      float: left;
+      margin: 0 2em 2em 0;
+    }
+
+    /* Picker */
+    .peeps-picker form {
+      transition: all 0.3s ease;
+    }
+    .peeps-picker form.isCollapsed {
+      background: #F568E3;
+      padding: 0.5em 1em;
+    }
+    .peeps-picker form.isCollapsed * {
+      display: none;
+    }
+    .peeps-picker h3 {
+      display: none;
+    }
+    .peeps-picker a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .peeps-picker form.isCollapsed .peeps-picker__opener,
+    .peeps-picker form.isCollapsed .peeps-picker__opener * {
+      display: block;
+    }
+    .peeps-picker__basics label {
+      margin-top: 1em;
+    }
+    .peeps-picker__form-element {
+      margin: 1em 0;
+    }
+    .peeps-picker__form-element ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .peeps-picker li {
+      float: left;
+      margin: 0 2em 1em 0;
+    }
+    label.peeps-picker__checkbox-label {
+      margin-left: -4px;
+      color: #666;
+    }
+    label.peeps-picker__checkbox-label:hover {
+      color: #111;
+    }
+    input.peeps-picker__checkbox {
+      padding: 0;
+      margin: 0;
+      vertical-align: bottom;
+      position: relative;
+      top: -4px;
+      *overflow: hidden;
+    }
+    .peeps-picker__checkbox:checked + .peeps-picker__label {
+      color: #bbb;
+    }
+    .peeps-picker__button {
+      background: #F568E3;
+      color: #fff;
+      padding: 0.5em 1em;
+      font-size: 16px;
+      border: none;
+    }
+    .peeps-picker__button:hover {
+      background: #CC59BD;
+    }
+
+    /* People */
+    .peeps-list__label {
+      color: #999;
+    }
   </style>
 </head>
 <body>
 
-  <section id="branding">
-    <h1>Peeps Picker 9000 Pro<h1>
-    <h2>hyper-agile rapid-scrum synergyacracy engine<h2>
+  <section id="peeps-branding" class="peeps-branding">
+    <img src="peeps_transparent.png" class="peeps-branding__logo" alt="Peeps Logo">
+    <h1>Peeps Picker Pro 9000<h1>
+    <h2>hyper-agile, rapid-scrum, synergy-acracy engine<h2>
   </section>
 
-  <section id="peeps-picker">
-    <form>
-      <label for="number" class="peeps-picker__label">Peeps?</label>
-      <select id="number" class="peeps-picker__select">
-        <option value="1">Just One</option>
-        <option value="2">Tidy Pair</option>
-        <option value="3">Tres Amigos</option>
-        <option value="4">Four Horsemen</option>
-        <option value="5">Five Wizards</option>
-        <option value="6">Geez Six!</option>
-        <option value="7">7777</option>
-        <option value="8">Qua? Eight!</option>
-      </select>
+  <section id="peeps-picker" class="peeps-picker">
+    <form data-persist="garlic" data-destroy="false">
+
+      <h3 class="peeps-picker__opener"><a href="#">Go Again</a></h3>
+
+      <fieldset class="peeps-picker__basics">
+        <legend>Basics</legend>
+
+        <div class="peeps-picker__form-element">
+          <label for="number" class="peeps-picker__label">Peeps?</label>
+          <select id="number" name="number" class="peeps-picker__select">
+            <option value="1">1 - Just One</option>
+            <option value="2">2 - Tidy Pair</option>
+            <option value="3">3 - Tres Amigos</option>
+            <option value="4">4 - Four Horsemen</option>
+            <option value="5">5 - Five Wizards</option>
+            <option value="6">6 - Geez Six!</option>
+            <option value="7">7 - 7777</option>
+            <option value="8">8-  Qua? Eight!</option>
+          </select>
+        </div>
+
+        <div class="peeps-picker__form-element">
+          <label for="number" class="peeps-picker__label">Random Sprinkles</label>
+          <input type="checkbox" name="randomizer" value="1" class="peeps-picker__checkbox">
+        </div>
+      </fieldset>
 
       <fieldset>
         <legend>Skills</legend>
-        <ul>
-          <li>
-            {{ skills }}
-            <label for="skills-sid-{{ sid }}" class="peeps-picker__label"></label>
-            <input type="checkbox" name="skills" value="1" id="skills-sid-{{ sid }}" class="peeps-picker__checkbox">
-            {{ /skills }}
-          </li>
-        </ul>
+
+        <div class="peeps-picker__form-element">
+          <ul id="skills"></ul>
+        </div>
       </fieldset>
 
-      <input type="submit" class="peeps-picker__button" value="Pick Whom">
+      <input type="submit" class="peeps-picker__button" value="Whom?">
     </form>
   </section>
 
   <section>
-    <h1>Peeps<h2>
+    <h2>Peeps</h2>
 
-    <ul id="peeps-list">
-  <!--     <li>
-        <h3 class="peeps-list__name">{{ name }}</h3>
-        <span class="peeps-list__label">Busy Level:</span> {{ busy }} <br>
-        <span class="peeps-list__label">Favorite Skill:</span> {{ favSkills }} <br>
-        <span class="peeps-list__label">Interested Skill:</span> {{ interestedSkills }}
-      </li> -->
+    <ul id="peeps-list" class="peeps-list">
     </ul>
   </section>
+
+  <script id="template-peeps" type="x-tmpl-mustache">
+    {{ #peeps }}
+    <li>
+      <h3 class="peeps-list__name">{{ name }} {{ #match }}({{ match }}){{ /match }}</h3>
+      <span class="peeps-list__label">Busy Level:</span> {{ busy }} <br>
+      <span class="peeps-list__label">Skills:</span> {{ #favSkills }} {{ >skill }} {{ /favSkills }} {{ #intSkills }} {{ >skill }} {{ /intSkills }}
+    </li>
+    {{ /peeps }}
+  </script>
+
+  <script id="template-listskill" type="x-tmpl-mustache">
+    {{ . }},
+  </script>
+
+  <script id="template-skills" type="x-tmpl-mustache">
+    {{ #skills }}
+    <li>
+      <input type="checkbox" name="skills" value="{{ sid }}" id="skills-sid-{{ sid }}" class="peeps-picker__checkbox">
+      <label for="skills-sid-{{ sid }}" class="peeps-picker__label peeps-picker__checkbox-label">{{ name }}</label>
+    </li>
+    {{ /skills }}
+  </script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
+  <!--<script src="//cdnjs.cloudflare.com/ajax/libs/garlic.js/1.2.2/garlic.min.js"></script>-->
+  <script src="main.js"></script>
 
 </body>
 </html>
