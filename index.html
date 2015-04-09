@@ -1,167 +1,9 @@
 <html>
 <head>
   <title>Peeps Picker Pro 9000: hyper-agile, rapid-scrum, synergy-acracy engine</title>
+  <link href='style.css' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    /* HTML */
-    body {
-      font-size: 16px;
-      font-family: 'Press Start 2P', cursive;
-      line-height: 1.25em;
-      color: #333;
-      margin: 0;
-      padding: 10px;
-    }
-    section {
-      min-width: 310px;
-      max-width: 960px;
-      margin: 1em auto;
-      padding: 1em 0;
-      border-top: 1px dashed #999;
-    }
-    section.first {
-      border-top: none;
-    }
-    h1 {
-      font-size: 1.5em;
-      line-height: 1.25em;
-      color: #58E0F4;
-    }
-    h2 {
-      font-size: 1.125em;
-    }
-    h2, legend {
-      color: #4DB849;
-    }
-    h3 {
-      color: #F568E3;
-
-    }
-    a {
-      color: #58E0F4;
-    }
-    fieldset {
-      margin: 1em 0;
-      border: 1px solid #ddd;
-    }
-    ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    /* Common */
-    .peeps-picker,
-    .peeps-list {
-      font-size: 0.875em;
-    }
-
-    /* Branding */
-    .peeps-branding h2 {
-      color: #666;
-    }
-    .peeps-branding__logo {
-      width: 300px;
-      float: left;
-      margin: 0 2em 2em 0;
-    }
-    @media screen and ( max-width: 675px ) {
-      .peeps-branding__logo {
-        float: none;
-      }
-    }
-
-    /* Picker */
-    .peeps-picker form {
-      transition: all 0.3s ease;
-    }
-    .peeps-picker form.isCollapsed {
-      background: #F568E3;
-      padding: 0.5em 1em;
-    }
-    .peeps-picker form.isCollapsed * {
-      display: none;
-    }
-    .peeps-picker h3 {
-      display: none;
-    }
-    .peeps-picker a {
-      color: #fff;
-      text-decoration: none;
-    }
-    .peeps-picker form.isCollapsed .peeps-picker__opener,
-    .peeps-picker form.isCollapsed .peeps-picker__opener a {
-      display: block;
-    }
-    .peeps-picker__basics label {
-      margin-top: 1em;
-    }
-    .peeps-picker__form-element {
-      margin: 1em 0;
-    }
-    .peeps-picker li {
-      float: left;
-      margin: 0 2em 1em 0;
-    }
-    label.peeps-picker__checkbox-label {
-      margin-left: -4px;
-      color: #666;
-    }
-    label.peeps-picker__checkbox-label:hover {
-      color: #111;
-    }
-    input.peeps-picker__checkbox {
-      padding: 0;
-      margin: 0;
-      vertical-align: bottom;
-      position: relative;
-      top: -4px;
-      *overflow: hidden;
-    }
-    .peeps-picker__checkbox:checked + .peeps-picker__label {
-      color: #bbb;
-    }
-    .peeps-picker__button {
-      background: #F568E3;
-      color: #fff;
-      font-family: 'Press Start 2P', cursive;
-      padding: 1.25em 3em;
-      font-size: 16px;
-      border: none;
-    }
-    .peeps-picker__button:hover {
-      background: #CC59BD;
-    }
-
-    /* People */
-    .peeps-list__label {
-      color: #bbb;
-      margin-top: 1em;
-      display: inline-block;
-      font-family: Helvetica, Arial, Verdana, "Sans Serif";
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-    .peeps-list ul {
-      font-size: 0.875em;
-    }
-    h3.peeps-list__name {
-      margin: 2em 0 0 0;
-      font-size: 1.375em;
-    }
-    .peeps-list ul p {
-      margin: 0;
-    }
-    .peeps-list li {
-      color: #666;
-    }
-
-    /* Footer */
-    .footer{
-      font-size: 0.75em;
-      color: #999;
-    }
-  </style>
 </head>
 <body>
 
@@ -179,7 +21,7 @@
         <legend>Basics</legend>
 
         <div class="peeps-picker__form-element">
-          <label for="number" class="peeps-picker__label">Peeps?</label>
+          <label for="number" class="peeps-picker__label">Number</label>
           <select id="number" name="number" class="peeps-picker__select">
             <option value="1">1 - Just One</option>
             <option value="2">2 - Tidy Pair</option>
@@ -190,6 +32,15 @@
             <option value="7">7 - 7777</option>
             <option value="8">8-  Qua? Eight!</option>
           </select>
+        </div>
+
+        <div class="peeps-picker__form-element">
+          <label for="people" class="peeps-picker__label">People</label><br>
+          <input type="text" id="people" cols="60" rows="3" name="people" class="peeps-picker__text" placeholder="55555555555555555555, 99999999999999999999"><br>
+          <span class="peeps-picker__desc">
+            Comma separated GitHub gist IDs, eg: https://gist.github.com/username/<strong>86900fa3c629f0d0adf0</strong><br>
+            Template skill profile: <a href="https://github.com/doublejosh/peepspicker/blob/gh-pages/example-profile.json" target="_blank">example-profile.json</a>
+          </span>
         </div>
 
         <div class="peeps-picker__form-element">
@@ -207,6 +58,7 @@
       </fieldset>
 
       <input type="submit" class="peeps-picker__button" value="Whom?">
+      <input type="reset" class="peeps-picker__button peeps-picker__button-reset" value="Reset">
     </form>
   </section>
 
@@ -215,8 +67,28 @@
     <ul></ul>
   </section>
 
+  <section id="peeps-message" class="peeps-picker__message">
+    <h2>Make it Official</h2>
+    <form>
+
+<!--       <div class="peeps-picker__form-element">
+        <input type="text" name="subject" class="peeps-picker__text" placeholder="Email Subject">
+      </div> -->
+
+      <div class="peeps-picker__form-element">
+        <input type="text" name="receipients" class="peeps-picker__text" placeholder="friend@example.com, smartypants@you.com">
+      </div>
+
+<!--       <div class="peeps-picker__form-element">
+        <textarea name="message" cols="60" rows="10" class="peeps-picker__textarea"></textarea>
+      </div> -->
+
+      <input type="submit" class="peeps-picker__button" value="Make it Official">
+    </form>
+  </section>
+
   <section id="footer" class="footer">
-    <p>When most folks could work on everything, this helps you pick when.</p>
+    <p>Peeps could work on everything, this helps you pick when.</p>
     <a href="http://www.twitter.com/nerdtapas" title="@nerdtaps on Twitter">@nerdtaps</a> |
     <a href="https://github.com/doublejosh/peepspicker" alt="peepspicker on GitHub">github/peepspicker</a>
   </section>
@@ -235,7 +107,6 @@
     <li>
       <h3 class="peeps-list__name">{{ name }} {{ #chance }}({{ chance }}){{ /chance }}</h3>
       <span class="peeps-list__label">Skills</span> <p>{{ #favSkills }} {{ >skill }} {{ /favSkills }} {{ #intSkills }} {{ >skill }} {{ /intSkills }}</p>
-      <span class="peeps-list__label">Busy Level</span> <p>{{ busy }}</p>
     </li>
     {{ /peeps }}
   </script>

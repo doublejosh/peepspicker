@@ -6,7 +6,12 @@
 
   var favSkillsMulti = 1,
       intSkillsMulti = 0.5,
-      randomizer = false;
+      randomizer = false,
+      examples = [
+        '8cb86c13726d5339146e',
+        'd33a2de82eb74f56c183',
+        'b98d83907abdda33a7be'
+      ];
 
 
   /**
@@ -17,14 +22,18 @@
    */
   function showPeeps(peeps) {
 
+console.log('showPeeps');
+console.log(peeps);
+
     $.getJSON('skills.json', function(json) {
       var skillPartial = $('#template-listskill').html(),
-          skill;
+          skill,
+          emails = [];
 
       // Loop through people and their skills.
-      for (p in peeps) {
-        for (s in peeps[p].favSkills) {
-          skill;
+      for (var p in peeps) {
+        for (var s in peeps[p].favSkills) {
+          skill = false;
           skill = _.find(json, function(_skill) {
             return (_skill.sid === parseInt(peeps[p].favSkills[s]));
           });
@@ -33,15 +42,19 @@
         }
 
         for (s in peeps[p].intSkills) {
-          skill;
+          skill = false;
           skill = _.find(json, function(_skill) {
-            return _skill.sid === parseInt(peeps[p].intSkills[s]);
+            return (_skill.sid === parseInt(peeps[p].intSkills[s]));
           });
           if (skill !== undefined) peeps[p].intSkills[s] = skill.name;
           else peeps[p].intSkills[s] = 'MISSING SKILL';
         }
+
+        emails.push(peeps[p].email);
       }
 
+console.log('Peeps DOM');
+console.log(peeps);
 
       // Render nested.
       $('#peeps-list ul').html(
@@ -52,6 +65,7 @@
         )
       );
 
+      $('#peeps-message input[name="receipients"]').val(emails.join(', '));
     });
   }
 
@@ -71,14 +85,53 @@
   /**
    * Turn match numbers into charts.
    */
-  function makeCharts() {
-    $.each('.peeps-list__chance', function() {
-      var svg = d3.select(this).append("svg"),
-          t = textures.lines().heavier(this.chance * 10);
+  // function makeCharts() {
+  //   $.each('.peeps-list__chance', function() {
+  //     var svg = d3.select(this).append("svg"),
+  //         t = textures.lines().heavier(this.chance * 10);
 
-      svg.call(t);
-      svg.append("circle").style("fill", t.url());
+  //     svg.call(t);
+  //     svg.append("circle").style("fill", t.url());
+  //   });
+  // }
+
+
+  // Grab peoples' interests from GitHub gists.
+  function getPeople(gids) {
+    var deferredList = [],
+        deferred = new $.Deferred(),
+        urlPrefix = '//api.github.com/gists/',
+        people = [];
+
+    // Get gist API data and transform.
+    function grabGist(gid) {
+      return $.getJSON(urlPrefix + gid, function(json) {
+        var person = JSON.parse(json.files[_.keys(json.files)[0]].content);
+
+        person.username = json.owner.login;
+        if (!person.hasOwnProperty('name')) {
+          person.name = json.owner.login;
+        }
+        people.push(person);
+      });
+    }
+
+    // Examples.
+    if (typeof gids !== 'Array' || !gids.length) gids = examples;
+
+console.log(gids);
+
+    // Collect gist content.
+    for (var g in gids) {
+      deferredList.push(grabGist(gids[g]));
+    }
+
+    $.when.apply($, deferredList).done(function() {
+      peopleStatic = people;
+      deferred.resolve(people);
     });
+
+    return deferred;
   }
 
 
@@ -106,7 +159,8 @@
       var data = {
             skills: [],
             randomizer: []
-          };
+          },
+          gids;
 
       $("#peeps-picker input, #peeps-picker select").each(function() {
         var type = $(this).attr('type') || $(this).prop('tagName'),
@@ -129,7 +183,7 @@
       });
 
 console.log('REQUESTED...');
-console.log(data.skills);
+console.log(data);
 
       return data;
     }
@@ -143,17 +197,16 @@ console.log(data.skills);
       var match = 0,
           def = new $.Deferred();
 
+console.log('MATCHING');
+console.log(peep.favSkills);
+console.log(data.skills);
+
       // Find match score.
       peep.favSkills = _.intersection(peep.favSkills, data.skills);
       match += favSkillsMulti * peep.favSkills.length;
       peep.intSkills = _.intersection(peep.intSkills, data.skills);
       match += intSkillsMulti * peep.intSkills.length;
       _.extend(peep, {match: match});
-
-console.log('Skills...');
-console.log(peep.favSkills);
-console.log(peep.intSkills);
-console.log('Match: ' + match);
 
       // Store max.
       maxMatch = (match > maxMatch) ? match : maxMatch;
@@ -164,7 +217,8 @@ console.log('Match: ' + match);
 
 
     // Load up the people.
-    $.getJSON('peeps.json', function(peeps) {
+    gids = data.people.split(/[ ,]+/);
+    $.when(getPeople(gids)).then(function (peeps) {
 
       // Gather and compute match.
       $.each(peeps, function() {
@@ -172,38 +226,21 @@ console.log('Match: ' + match);
       });
 
       // Compute change and pick.
-      $.when.apply(this, deferredList).done(function() {
-
-console.log('Max : ' + maxMatch);
-
+      $.when.apply($, deferredList).then(function() {
         $.each(peeps, function(i, peep) {
           var chance = peep.match / maxMatch;
-
-console.log('- - - - - - - - - - - - - - -');
-console.log('Name : ' + peep.name);
-console.log('Match : ' + peep.match);
-console.log('Chance : ' + chance);
 
           // Add some chance if desired.
           if (parseInt(data.randomizer) === 1) {
             chance = Math.random() * chance;
           }
 
-console.log('AFTER Chance : ' + chance);
-
           chance = Math.round(chance * 100) / 100 || 0;
           this.chance = String(chance);
-console.log(this);
         });
-
-console.log('- - - - - - - - - - - - - - -');
-console.log(peeps);
 
         // Sort matches and send back.
         sortedPeeps = _.sortBy(peeps, 'chance').reverse();
-
-console.log('- - - - - - - - - - - - - - -');
-console.log(sortedPeeps);
 
         // @todo Always randomize among equal values.
         deferred.resolve(sortedPeeps.slice(0, data.number));
@@ -215,20 +252,32 @@ console.log(sortedPeeps);
 
 
   // Load that page!
-  $(document).ready(function() {
-    var $form = $('#peeps-picker form');
+  $(window).load(function() {
+    var $form = $('#peeps-picker form'),
+        stashedPeeps = $form.find('#people').val();
 
     buildForm();
+    $('#peeps-message').hide();
 
-    $.getJSON('peeps.json', function(json) {
-      showPeeps(json);
+    // Use garlic saved peeps.
+    gids = stashedPeeps.split(/[ ,]+/);
+    $.when(getPeople(gids)).then(function(peeps) {
+      showPeeps(peeps.sort(function() {
+        return (Math.round(Math.random()) - 0.5);
+      }));
     });
 
-    // Bind form.
+    // Match form.
     $form.on('submit', function (e) {
-      $.when(processData()).done(function(data) {
+      $.when(processData()).then(function(data) {
+
+console.log('about to Show');
+console.log(data);
+
         showPeeps(data);
-        makeCharts();
+        $('#peeps-message').show();
+
+        //makeCharts();
       });
       $(this).addClass('isCollapsed');
       e.preventDefault();
@@ -236,7 +285,31 @@ console.log(sortedPeeps);
     $form.on('click', function () {
       if ($form.hasClass('isCollapsed')) $form.toggleClass('isCollapsed');
     });
-    $('#peeps-picker__opener').on('click', function(e) { e.preventDefault() });
+    $('#peeps-picker__opener').on('click', function(e) {
+      e.preventDefault();
+    });
+
+    // Reset.
+    $form.on('reset', function () {
+      $(this).find('input:checkbox').removeAttr('checked');
+      $(this).garlic('destroy');
+      $('#peeps-message').hide();
+    });
+
+    // Message form.
+    $('#peeps-message form').on('submit', function (e) {
+      var emails = $(this).find('input[name="receipients"]').val(),
+          skills = [],
+          body;
+
+      $('#skills .peeps-picker__checkbox-label').each(function() {
+        if ($(this).siblings('input').prop('checked')) {
+          skills.push($(this).text());
+        }
+      });
+      window.open('mailto:' + emails + '?subject=New%20Project&body=%0D%0A%0D%0A%0D%0ARequirements: ' + skills.join(', '), 'messageWindow');
+      e.preventDefault();
+    });
 
   });
 

@@ -1,0 +1,177 @@
+/* HTML */
+body {
+  font-size: 16px;
+  font-family: 'Press Start 2P', cursive;
+  line-height: 1.25em;
+  color: #333;
+  margin: 0;
+  padding: 10px;
+}
+section {
+  min-width: 310px;
+  max-width: 960px;
+  margin: 1em auto;
+  padding: 1em 0;
+  border-top: 1px dashed #999;
+}
+section.first {
+  border-top: none;
+}
+h1 {
+  font-size: 1.5em;
+  line-height: 1.25em;
+  color: #58E0F4;
+}
+h2 {
+  font-size: 1.125em;
+}
+h2, legend {
+  color: #7EE8AF;
+}
+h3 {
+  color: #F568E3;
+}
+a {
+  color: #58E0F4;
+}
+fieldset {
+  margin: 1em 0;
+  border: 1px solid #ddd;
+}
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+/* Common */
+.peeps-picker form,
+.peeps-list ul {
+  font-size: 0.875em;
+}
+
+/* Branding */
+.peeps-branding h2 {
+  color: #666;
+}
+.peeps-branding__logo {
+  width: 300px;
+  float: left;
+  margin: 0 2em 2em 0;
+}
+@media screen and ( max-width: 675px ) {
+  .peeps-branding__logo {
+    float: none;
+  }
+}
+
+/* Picker */
+.peeps-picker form {
+  transition: all 0.3s ease;
+}
+.peeps-picker form.isCollapsed {
+  background: #F568E3;
+  padding: 0.5em 1em;
+}
+.peeps-picker form.isCollapsed * {
+  display: none;
+}
+.peeps-picker h3 {
+  display: none;
+}
+.peeps-picker__opener a {
+  color: #fff;
+  text-decoration: none;
+}
+.peeps-picker form.isCollapsed .peeps-picker__opener,
+.peeps-picker form.isCollapsed .peeps-picker__opener a {
+  display: block;
+}
+.peeps-picker__basics label {
+  margin-top: 1em;
+  vertical-align: top;
+}
+.peeps-picker__form-element {
+  margin: 1em 0;
+}
+.peeps-picker__text {
+  padding: 0.5em;
+  min-width: 300px;
+  font-size: 16px;
+  line-height: 1.125em;
+}
+.peeps-picker__desc {
+  display: block;
+  padding-top: 0.5em;
+  font-family: Helvetica, Arial, Verdana, "Sans Serif";
+  font-size: 0.875em;
+  color: #999;
+}
+
+.peeps-picker li {
+  float: left;
+  margin: 0 2em 1em 0;
+}
+label.peeps-picker__checkbox-label {
+  margin-left: -4px;
+  color: #666;
+}
+label.peeps-picker__checkbox-label:hover {
+  color: #111;
+}
+input.peeps-picker__checkbox {
+  padding: 0;
+  margin: 0;
+  vertical-align: bottom;
+  position: relative;
+  top: -4px;
+  *overflow: hidden;
+}
+.peeps-picker__checkbox:checked + .peeps-picker__label {
+  color: #bbb;
+}
+.peeps-picker__button {
+  background: #F568E3;
+  color: #fff;
+  font-family: 'Press Start 2P', cursive;
+  padding: 1.25em 3em;
+  font-size: 16px;
+  border: none;
+}
+.peeps-picker__button:hover {
+  background: #CC59BD;
+}
+.peeps-picker__button-reset {
+  background: #bbb;
+}
+.peeps-picker__button-reset:hover {
+  background: #999;
+}
+
+/* People */
+.peeps-list__label {
+  color: #bbb;
+  margin-top: 1em;
+  display: inline-block;
+  font-family: Helvetica, Arial, Verdana, "Sans Serif";
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.peeps-list ul {
+  font-size: 0.875em;
+}
+h3.peeps-list__name {
+  margin: 2em 0 0 0;
+  font-size: 1.375em;
+}
+.peeps-list ul p {
+  margin: 0;
+}
+.peeps-list li {
+  color: #666;
+}
+
+/* Footer */
+.footer{
+  font-size: 0.75em;
+  color: #999;
+}
