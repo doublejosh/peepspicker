@@ -21,10 +21,6 @@
    *   People chosen for group.
    */
   function showPeeps(peeps) {
-
-console.log('showPeeps');
-console.log(peeps);
-
     $.getJSON('skills.json', function(json) {
       var skillPartial = $('#template-listskill').html(),
           skill,
@@ -52,9 +48,6 @@ console.log(peeps);
 
         emails.push(peeps[p].email);
       }
-
-console.log('Peeps DOM');
-console.log(peeps);
 
       // Render nested.
       $('#peeps-list ul').html(
@@ -117,9 +110,7 @@ console.log(peeps);
     }
 
     // Examples.
-    if (typeof gids !== 'Array' || !gids.length) gids = examples;
-
-console.log(gids);
+    if (typeof gids !== 'object' || !gids.length) gids = examples;
 
     // Collect gist content.
     for (var g in gids) {
@@ -182,9 +173,6 @@ console.log(gids);
         }
       });
 
-console.log('REQUESTED...');
-console.log(data);
-
       return data;
     }
 
@@ -196,10 +184,6 @@ console.log(data);
     function checkMatch(peep) {
       var match = 0,
           def = new $.Deferred();
-
-console.log('MATCHING');
-console.log(peep.favSkills);
-console.log(data.skills);
 
       // Find match score.
       peep.favSkills = _.intersection(peep.favSkills, data.skills);
@@ -270,10 +254,6 @@ console.log(data.skills);
     // Match form.
     $form.on('submit', function (e) {
       $.when(processData()).then(function(data) {
-
-console.log('about to Show');
-console.log(data);
-
         showPeeps(data);
         $('#peeps-message').show();
 
