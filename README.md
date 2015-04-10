@@ -13,13 +13,21 @@ Peeps could work on everything, this helps you pick when.
 - Email the group.
 
 ### Example profile gist
-```javascript
-{
-  "name": "Your Name",
-  "email": "your@email.com",
-  "favSkills": ["1", "2", "3"],
-  "intSkills": ["4", "5", "6", "7", "8"]
-}
+```yaml
+---
+name: Your Name
+email: your@email.com
+favSkills:
+  - api
+  - js
+  - php
+intSkills:
+  - performance
+  - ci
+  - refactors
 ```
 
 ### See [GitHub pages site](http://doublejosh.github.io/peepspicker/).
+
+### Todo
+- Make skill list avilable to customize.
