@@ -7,9 +7,11 @@
   var favSkillsMulti = 1,
       intSkillsMulti = 0.5,
       randomizer = false,
-      //urlPrefix = 'mock-data/',
-      urlPrefix = '//api.github.com/gists/',
-      examples = [
+      urlPrefix = 'mock-data/',
+      //urlPrefix = '//api.github.com/gists/',
+      exampleSkills = '158c42f68ebd2f6bf628',
+      //exampleCustomer = 'db256772cdcde68ad042',
+      exampleProfiles = [
         '8cb86c13726d5339146e',
         'd33a2de82eb74f56c183',
         'b98d83907abdda33a7be'
@@ -17,74 +19,52 @@
 
 
   /**
-   * Show chosen few.
-   *
-   * @param {array} peeps
-   *   People chosen for group.
+   * Build the form from configs.
    */
-  function showPeeps(peeps) {
-    $.get('skills.yml', function(data) {
-      var json = [],
-          skillPartial = $('#template-listskill').html(),
-          skill,
-          emails = [];
+  function init() {
+    var $form = $('#peeps-picker form'),
+        stashedPeeps = $form.find('#people').val(),
+        stashedSkills = $form.find('#skills-source').val(),
+        skillsGid = stashedSkills || exampleSkills,
+        peepGids = (stashedPeeps) ? stashedPeeps.split(/[ ,]+/) : [];
 
-      _.mapObject(jsyaml.load(data), function(val, key) {
-        json.push({sid: key, name: val});
-      });
+    // Use garlic saved skills.
+    $.when(getGistYAML(skillsGid)).then(function (data) {
+      $('#skills').html(
+        Mustache.render($('#template-skills').html(), {skills: data})
+      ).parents('form').garlic();
+    });
 
-      // Loop through people and their skills.
-      for (var p in peeps) {
-        for (var s in peeps[p].favSkills) {
-          skill = false;
-          skill = _.find(json, function(_skill) {
-            return (_skill.sid === peeps[p].favSkills[s]);
-          });
-          if (skill !== undefined) peeps[p].favSkills[s] = skill.name;
-          else peeps[p].favSkills[s] = 'MISSING SKILL';
-        }
-
-        for (s in peeps[p].intSkills) {
-          skill = false;
-          skill = _.find(json, function(_skill) {
-            return (_skill.sid === peeps[p].intSkills[s]);
-          });
-          if (skill !== undefined) peeps[p].intSkills[s] = skill.name;
-          else peeps[p].intSkills[s] = 'MISSING SKILL';
-        }
-
-        emails.push(peeps[p].email);
-      }
-
-      // Render nested.
-      $('#peeps-list ul').html(
-        Mustache.to_html(
-          $('#template-peeps').html(),
-          {peeps: peeps},
-          {skill: skillPartial}
-        )
-      );
-
-      $('#peeps-message input[name="receipients"]').val(emails.join(', '));
+    // Use garlic saved peeps.
+    $.when(getPeople(peepGids)).then(function(peeps) {
+      showPeeps(peeps.sort(function() {
+        return (Math.round(Math.random()) - 0.5);
+      }));
     });
   }
 
 
   /**
-   * Build the form from configs.
+   * Utility YAML gist grabber.
+   *
+   * @param {string} gid
+   * @return {array}
+   *   List of objects
    */
-  function buildForm() {
-    $.get('skills.yml', function(data) {
-      var json = [];
+  function getGistYAML(gid) {
+    var deferred = $.Deferred();
 
-      _.mapObject(jsyaml.load(data), function(val, key) {
-        json.push({sid: key, name: val});
+    $.getJSON(urlPrefix + gid, function(data) {
+      var yaml = data.files[_.keys(data.files)[0]].content,
+          list = [];
+
+      _.mapObject(jsyaml.load(yaml), function(val, key) {
+        list.push({key: key, value: val});
       });
 
-      $('#skills').html(
-        Mustache.render($('#template-skills').html(), {skills: json})
-      ).parents('form').garlic();
+      deferred.resolve(list);
     });
+    return deferred;
   }
 
 
@@ -102,40 +82,120 @@
   // }
 
 
-  // Grab peoples' interests from GitHub gists.
+  /**
+   * Grab profile from GitHub gists.
+   *
+   * @param  {array} gids
+   * @return {Deferred}
+   *   Resolves with an array of people objects.
+   */
   function getPeople(gids) {
     var deferredList = [],
         deferred = new $.Deferred(),
         people = [];
 
     // Get gist API data and transform.
-    function grabGist(gid) {
-      return $.getJSON(urlPrefix + gid, function(json) {
-        var yaml = json.files[_.keys(json.files)[0]].content;
+    function grabGistYAMLprofile(gid) {
+      return $.getJSON(urlPrefix + gid, function(data) {
+        var yaml = data.files[_.keys(data.files)[0]].content;
             person = jsyaml.load(yaml);
 
-        person.username = json.owner.login;
+        person.username = data.owner.login;
         if (!person.hasOwnProperty('name')) {
-          person.name = json.owner.login;
+          person.name = data.owner.login;
         }
         people.push(person);
       });
     }
 
     // Examples.
-    if (typeof gids !== 'object' || !gids.length) gids = examples;
+    if (typeof gids !== 'object' || gids.length === 0) gids = exampleProfiles;
+
+console.log('Qua');
+console.log(gids.length);
 
     // Collect gist content.
     for (var g in gids) {
-      deferredList.push(grabGist(gids[g]));
+
+console.log('HAPPNIN');
+
+      deferredList.push(grabGistYAMLprofile(gids[g]));
     }
 
     $.when.apply($, deferredList).done(function() {
+
+console.log('PEOPLE');
+console.log(people);
+
       peopleStatic = people;
       deferred.resolve(people);
     });
 
     return deferred;
+  }
+
+
+  /**
+   * Show chosen few.
+   *
+   * @param {array} peeps
+   *   People chosen for group.
+   */
+  function showPeeps(peeps) {
+    var skillsGid = $('#peeps-picker form').find('#skills-source').val() || exampleSkills;
+
+    //@ todo static Skills var.
+
+    $.when(getGistYAML(skillsGid)).then(function (data) {
+      var skillPartial = $('#template-listskill').html(),
+          skill,
+          emails = [],
+          key;
+
+      // Loop through people and their skills.
+      for (var p in peeps) {
+        for (var s in peeps[p].favSkills) {
+          key = peeps[p].favSkills[s];
+          skill = false;
+
+          skill = _.find(data, function(_skill) {
+            return (_skill.key === key);
+          });
+          if (skill !== undefined) {
+            peeps[p].favSkills[s] = {key: key, value: skill.value};
+          }
+          else peeps[p].favSkills[s] = {key: key, value: 'MISSING SKILL: ' + s};
+        }
+
+        for (s in peeps[p].intSkills) {
+          key = peeps[p].intSkills[s];
+          skill = false;
+
+          skill = _.find(data, function(_skill) {
+            return (_skill.key === key);
+          });
+          if (skill !== undefined) {
+            peeps[p].intSkills[s] = {key: key, value: skill.value};
+          }
+          else peeps[p].intSkills[s] = {key: key, value: 'MISSING SKILL: ' + s};
+        }
+
+        emails.push(peeps[p].email);
+      }
+
+console.log(peeps);
+
+      // Render nested.
+      $('#peeps-list ul').html(
+        Mustache.to_html(
+          $('#template-peeps').html(),
+          {peeps: peeps},
+          {skill: skillPartial}
+        )
+      );
+
+      $('#peeps-message input[name="receipients"]').val(emails.join(', '));
+    });
   }
 
 
@@ -213,14 +273,22 @@
     }
 
 
-    // Load up the people.
-    gids = data.people.split(/[ ,]+/);
-    $.when(getPeople(gids)).then(function (peeps) {
+console.log(!!data.people);
 
+    // Load up the people.
+    gids = (data.people) ? data.people.split(/[ ,]+/) : exampleProfiles;
+
+console.log('PROCESSING');
+console.log(gids);
+
+    $.when(getPeople(gids)).then(function (peeps) {
       // Gather and compute match.
       $.each(peeps, function() {
         deferredList.push(checkMatch(this));
       });
+
+console.log('PEEEEEPIN');
+console.log(peeps);
 
       // Compute change and pick.
       $.when.apply($, deferredList).then(function() {
@@ -231,13 +299,15 @@
           if (parseInt(data.randomizer) === 1) {
             chance = Math.random() * chance;
           }
-
-          chance = Math.round(chance * 100) / 100 || 0;
-          this.chance = String(chance);
+          // Compute.
+          this.chance = String(Math.round(chance * 100) / 100 || 0);
         });
 
         // Sort matches and send back.
         sortedPeeps = _.sortBy(peeps, 'chance').reverse();
+
+console.log('sortedPeeps');
+console.log(sortedPeeps);
 
         // @todo Always randomize among equal values.
         deferred.resolve(sortedPeeps.slice(0, data.number));
@@ -250,19 +320,10 @@
 
   // Load that page!
   $(window).load(function() {
-    var $form = $('#peeps-picker form'),
-        stashedPeeps = $form.find('#people').val();
+    var $form = $('#peeps-picker form');
 
-    buildForm();
+    init();
     $('#peeps-message').hide();
-
-    // Use garlic saved peeps.
-    gids = (stashedPeeps) ? stashedPeeps.split(/[ ,]+/) : [];
-    $.when(getPeople(gids)).then(function(peeps) {
-      showPeeps(peeps.sort(function() {
-        return (Math.round(Math.random()) - 0.5);
-      }));
-    });
 
     // Match form.
     $form.on('submit', function (e) {

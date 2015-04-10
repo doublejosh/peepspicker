@@ -13,6 +13,7 @@ section {
   margin: 1em auto;
   padding: 1em 0;
   border-top: 1px dashed #999;
+  clear: both;
 }
 section.first {
   border-top: none;
@@ -86,12 +87,17 @@ ul {
 .peeps-picker form.isCollapsed .peeps-picker__opener a {
   display: block;
 }
-.peeps-picker__basics label {
-  margin-top: 1em;
-  vertical-align: top;
-}
 .peeps-picker__form-element {
   margin: 1em 0;
+}
+.peeps-picker__basics label {
+  width: 150px;
+  display: block;
+  float: left;
+}
+.peeps-picker__basics label[for="randomizer"],
+.peeps-picker__randomizer {
+  color: #999;
 }
 .peeps-picker__text {
   padding: 0.5em;
@@ -105,6 +111,7 @@ ul {
   font-family: Helvetica, Arial, Verdana, "Sans Serif";
   font-size: 0.875em;
   color: #999;
+  margin-left: 150px;
 }
 
 .peeps-picker li {
