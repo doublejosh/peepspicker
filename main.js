@@ -140,6 +140,7 @@
     if (peepsValue) params.peeps = peepsValue;
     if (skillsValue) params.skills = skillsValue;
 
+    $('.peeps-picker__quick-link').remove();
     $('#peeps-picker form').append(
       $('<h3>', {class: 'peeps-picker__quick-link'}).append(
         $('<a>', {
