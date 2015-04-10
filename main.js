@@ -7,6 +7,8 @@
   var favSkillsMulti = 1,
       intSkillsMulti = 0.5,
       randomizer = false,
+      //urlPrefix = 'mock-data/',
+      urlPrefix = '//api.github.com/gists/',
       examples = [
         '8cb86c13726d5339146e',
         'd33a2de82eb74f56c183',
@@ -21,17 +23,22 @@
    *   People chosen for group.
    */
   function showPeeps(peeps) {
-    $.getJSON('skills.json', function(json) {
-      var skillPartial = $('#template-listskill').html(),
+    $.get('skills.yml', function(data) {
+      var json = [],
+          skillPartial = $('#template-listskill').html(),
           skill,
           emails = [];
+
+      _.mapObject(jsyaml.load(data), function(val, key) {
+        json.push({sid: key, name: val});
+      });
 
       // Loop through people and their skills.
       for (var p in peeps) {
         for (var s in peeps[p].favSkills) {
           skill = false;
           skill = _.find(json, function(_skill) {
-            return (_skill.sid === parseInt(peeps[p].favSkills[s]));
+            return (_skill.sid === peeps[p].favSkills[s]);
           });
           if (skill !== undefined) peeps[p].favSkills[s] = skill.name;
           else peeps[p].favSkills[s] = 'MISSING SKILL';
@@ -40,7 +47,7 @@
         for (s in peeps[p].intSkills) {
           skill = false;
           skill = _.find(json, function(_skill) {
-            return (_skill.sid === parseInt(peeps[p].intSkills[s]));
+            return (_skill.sid === peeps[p].intSkills[s]);
           });
           if (skill !== undefined) peeps[p].intSkills[s] = skill.name;
           else peeps[p].intSkills[s] = 'MISSING SKILL';
@@ -67,7 +74,13 @@
    * Build the form from configs.
    */
   function buildForm() {
-    $.getJSON('skills.json', function(json) {
+    $.get('skills.yml', function(data) {
+      var json = [];
+
+      _.mapObject(jsyaml.load(data), function(val, key) {
+        json.push({sid: key, name: val});
+      });
+
       $('#skills').html(
         Mustache.render($('#template-skills').html(), {skills: json})
       ).parents('form').garlic();
@@ -93,13 +106,13 @@
   function getPeople(gids) {
     var deferredList = [],
         deferred = new $.Deferred(),
-        urlPrefix = '//api.github.com/gists/',
         people = [];
 
     // Get gist API data and transform.
     function grabGist(gid) {
       return $.getJSON(urlPrefix + gid, function(json) {
-        var person = JSON.parse(json.files[_.keys(json.files)[0]].content);
+        var yaml = json.files[_.keys(json.files)[0]].content;
+            person = jsyaml.load(yaml);
 
         person.username = json.owner.login;
         if (!person.hasOwnProperty('name')) {
@@ -244,7 +257,7 @@
     $('#peeps-message').hide();
 
     // Use garlic saved peeps.
-    gids = stashedPeeps.split(/[ ,]+/);
+    gids = (stashedPeeps) ? stashedPeeps.split(/[ ,]+/) : [];
     $.when(getPeople(gids)).then(function(peeps) {
       showPeeps(peeps.sort(function() {
         return (Math.round(Math.random()) - 0.5);
