@@ -7,8 +7,8 @@
   var favSkillsMulti = 1,
       intSkillsMulti = 0.5,
       randomizer = false,
-      urlPrefix = 'mock-data/',
-      //urlPrefix = '//api.github.com/gists/',
+      //urlPrefix = 'mock-data/',
+      urlPrefix = '//api.github.com/gists/',
       exampleSkills = '158c42f68ebd2f6bf628',
       //exampleCustomer = 'db256772cdcde68ad042',
       exampleProfiles = [
@@ -111,22 +111,12 @@
     // Examples.
     if (typeof gids !== 'object' || gids.length === 0) gids = exampleProfiles;
 
-console.log('Qua');
-console.log(gids.length);
-
     // Collect gist content.
     for (var g in gids) {
-
-console.log('HAPPNIN');
-
       deferredList.push(grabGistYAMLprofile(gids[g]));
     }
 
     $.when.apply($, deferredList).done(function() {
-
-console.log('PEOPLE');
-console.log(people);
-
       peopleStatic = people;
       deferred.resolve(people);
     });
@@ -182,8 +172,6 @@ console.log(people);
 
         emails.push(peeps[p].email);
       }
-
-console.log(peeps);
 
       // Render nested.
       $('#peeps-list ul').html(
@@ -273,22 +261,13 @@ console.log(peeps);
     }
 
 
-console.log(!!data.people);
-
     // Load up the people.
     gids = (data.people) ? data.people.split(/[ ,]+/) : exampleProfiles;
-
-console.log('PROCESSING');
-console.log(gids);
-
     $.when(getPeople(gids)).then(function (peeps) {
       // Gather and compute match.
       $.each(peeps, function() {
         deferredList.push(checkMatch(this));
       });
-
-console.log('PEEEEEPIN');
-console.log(peeps);
 
       // Compute change and pick.
       $.when.apply($, deferredList).then(function() {
@@ -305,9 +284,6 @@ console.log(peeps);
 
         // Sort matches and send back.
         sortedPeeps = _.sortBy(peeps, 'chance').reverse();
-
-console.log('sortedPeeps');
-console.log(sortedPeeps);
 
         // @todo Always randomize among equal values.
         deferred.resolve(sortedPeeps.slice(0, data.number));
