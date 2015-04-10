@@ -11,7 +11,7 @@ If you just want a quick demo, the tool will fill in fake data.  Pick a number o
 ## Use Your Data
 To use this tool with your group, you'll need to create several [gists](https://gist.github.com) to represent your data.
 
-First you need a skills list (YAML),  [see example](https://gist.github.com/doublejosh/158c42f68ebd2f6bf628).
+First you need a skills master list (YAML),  [see example](https://gist.github.com/doublejosh/158c42f68ebd2f6bf628).
 ```yaml
 ---
 js: JavaScript
@@ -23,7 +23,7 @@ drupal: Drupal
 tests: Automated testing
 ```
 
-Next each participant will need to create a gist representing their skillset (YAML), this includes both favorite skills and interest skills.  Each has a different match multiplier.  See examples gists: [#1](https://gist.github.com/doublejosh/8cb86c13726d5339146e), [#2](https://gist.github.com/doublejosh/d33a2de82eb74f56c183), [#3](https://gist.github.com/doublejosh/b98d83907abdda33a7be).
+Next each participant will need to create a gist representing their skillset (YAML), this includes both favorite skills and interest skills.  Peeps' `favSkills` have a higher match multiplier than their `intSkills`.  See examples gists: [#1](https://gist.github.com/doublejosh/8cb86c13726d5339146e), [#2](https://gist.github.com/doublejosh/d33a2de82eb74f56c183), [#3](https://gist.github.com/doublejosh/b98d83907abdda33a7be).
 ```yaml
 ---
 name: Captain Interesting
@@ -49,9 +49,14 @@ Visit the peeps picker. NOTE: Form values are stashed in your browser for next t
 
 Generate a project team.  It will even start a quick email for you.
 
+## Quick Link
+You can rely on browser storage to keep the form populated with your group's data, but you can also use a quick link to allow easily sharing this tool.  Great for managers, new people, etc.  This uses query params like this `?skills=GID&people=GID,GID,GID` to set form values.
+
 ## Todo
 - Adjustable match multipliers.
 - Make "customer" a match factor.
+- Only reach out to API on page load or form change.
+- Optionally just use peeps Gists for skills list.
 
 ## Development
 To develop offline, without bumping into API limits, stash the GitHub API JSON responses in the `mock-data` folder with a file name of the gist ID.  Find such data at a url like...

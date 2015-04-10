@@ -69,10 +69,6 @@ ul {
 .peeps-picker form {
   transition: all 0.3s ease;
 }
-.peeps-picker form.isCollapsed {
-  background: #F568E3;
-  padding: 0.5em 1em;
-}
 .peeps-picker form.isCollapsed * {
   display: none;
 }
@@ -83,8 +79,21 @@ ul {
   color: #fff;
   text-decoration: none;
 }
-.peeps-picker form.isCollapsed .peeps-picker__opener,
+.peeps-picker form.isCollapsed form,
+.peeps-picker form.isCollapsed h3 {
+  margin-bottom: 0;
+}
+.peeps-picker form.isCollapsed a {
+  padding: 1em 2em;
+  display: block;
+}
 .peeps-picker form.isCollapsed .peeps-picker__opener a {
+  background: #F568E3;
+}
+.peeps-picker form.isCollapsed .peeps-picker__opener,
+.peeps-picker form.isCollapsed .peeps-picker__opener *,
+.peeps-picker form.isCollapsed .peeps-picker__quick-link,
+.peeps-picker form.isCollapsed .peeps-picker__quick-link * {
   display: block;
 }
 .peeps-picker__form-element {

@@ -1,10 +1,11 @@
 /**
  * Peeps Picker 9000 Pro
- * 0.0.1
+ * 0.1.0
  */
 (function($, _) {
 
-  var favSkillsMulti = 1,
+  var templates = {},
+      favSkillsMulti = 1,
       intSkillsMulti = 0.5,
       randomizer = false,
       //urlPrefix = 'mock-data/',
@@ -15,23 +16,38 @@
         '8cb86c13726d5339146e',
         'd33a2de82eb74f56c183',
         'b98d83907abdda33a7be'
-      ];
+      ],
+      templates = {
+        peep: $('#template-peeps').html(),
+        skillForm: $('#template-skills').html(),
+        skillList: $('#template-listskill').html()
+      },
+      $pickerForm = $('#peeps-picker form');
 
 
   /**
    * Build the form from configs.
    */
   function init() {
-    var $form = $('#peeps-picker form'),
-        stashedPeeps = $form.find('#people').val(),
-        stashedSkills = $form.find('#skills-source').val(),
-        skillsGid = stashedSkills || exampleSkills,
-        peepGids = (stashedPeeps) ? stashedPeeps.split(/[ ,]+/) : [];
+    var skillsGid = grabSkills(),
+        peepGids = grabPeeps();
+
+
+    // Compile all the templates.
+    for (var t in templates) Mustache.parse(t);
+
+    // Shove params into form.
+    if (getUrlParam('peeps')) {
+      $pickerForm.find('#people').val(getUrlParam('peeps').replace('/',''));
+    }
+    if (getUrlParam('skills')) {
+      $pickerForm.find('#skills-source').val(getUrlParam('skills').replace('/',''));
+    }
 
     // Use garlic saved skills.
     $.when(getGistYAML(skillsGid)).then(function (data) {
       $('#skills').html(
-        Mustache.render($('#template-skills').html(), {skills: data})
+        Mustache.render(templates.skillForm, {skills: data})
       ).parents('form').garlic();
     });
 
@@ -45,7 +61,29 @@
 
 
   /**
-   * Utility YAML gist grabber.
+   * Get people list form wherever is appropriate.
+   *
+   * @return {array}
+   */
+  function grabPeeps() {
+    var stashedPeeps = $pickerForm.find('#people').val() || getUrlParam('peeps');
+    return (stashedPeeps) ? stashedPeeps.replace('/','').split(/[ ,]+/) : [];
+  }
+
+
+  /**
+   * Get people list form wherever is appropriate.
+   *
+   * @return {array}
+   */
+  function grabSkills() {
+    var stashedSkills = $pickerForm.find('#skills-source').val() || getUrlParam('skills');
+    return stashedSkills || exampleSkills;
+  }
+
+
+  /**
+   * Utility: YAML gist grabber.
    *
    * @param {string} gid
    * @return {array}
@@ -65,6 +103,49 @@
       deferred.resolve(list);
     });
     return deferred;
+  }
+
+
+  /**
+   * Utility: Get URL parameter.
+   *
+   * @param {string} param
+   * @return {string}
+   */
+  function getUrlParam(sParam) {
+    var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName;
+
+    for (var i = 0; i < sURLVariables.length; i++) {
+      sParameterName = sURLVariables[i].split('=');
+      if (sParameterName[0] == sParam) {
+        return sParameterName[1];
+      }
+    }
+    return false;
+  }
+
+
+  /**
+   * Create a quick link to this set of data.
+   *
+   * @param {array} data
+   */
+  function createQuickLink(data) {
+    var peepsValue = $pickerForm.find('#people').val(),
+        skillsValue = $pickerForm.find('#skills-source').val(),
+        params = {};
+
+    if (peepsValue) params.peeps = peepsValue;
+    if (skillsValue) params.skills = skillsValue;
+
+    $('#peeps-picker form').append(
+      $('<h3>', {class: 'peeps-picker__quick-link'}).append(
+        $('<a>', {
+          html: 'Quick link to this data',
+          href: window.location + '?' + $.param(params),
+    })));
   }
 
 
@@ -132,13 +213,10 @@
    *   People chosen for group.
    */
   function showPeeps(peeps) {
-    var skillsGid = $('#peeps-picker form').find('#skills-source').val() || exampleSkills;
-
-    //@ todo static Skills var.
+    var skillsGid = grabSkills();
 
     $.when(getGistYAML(skillsGid)).then(function (data) {
-      var skillPartial = $('#template-listskill').html(),
-          skill,
+      var skill,
           emails = [],
           key;
 
@@ -154,7 +232,9 @@
           if (skill !== undefined) {
             peeps[p].favSkills[s] = {key: key, value: skill.value};
           }
-          else peeps[p].favSkills[s] = {key: key, value: 'MISSING SKILL: ' + s};
+          else {
+            peeps[p].favSkills[s] = {key: key, value: 'MISSING:(' + key + ')'};
+          }
         }
 
         for (s in peeps[p].intSkills) {
@@ -167,7 +247,9 @@
           if (skill !== undefined) {
             peeps[p].intSkills[s] = {key: key, value: skill.value};
           }
-          else peeps[p].intSkills[s] = {key: key, value: 'MISSING SKILL: ' + s};
+          else {
+            peeps[p].intSkills[s] = {key: key, value: 'MISSING:(' + key + ')'};
+          }
         }
 
         emails.push(peeps[p].email);
@@ -175,11 +257,7 @@
 
       // Render nested.
       $('#peeps-list ul').html(
-        Mustache.to_html(
-          $('#template-peeps').html(),
-          {peeps: peeps},
-          {skill: skillPartial}
-        )
+        Mustache.to_html(templates.peep, {peeps: peeps}, {skill: templates.skillList})
       );
 
       $('#peeps-message input[name="receipients"]').val(emails.join(', '));
@@ -296,31 +374,30 @@
 
   // Load that page!
   $(window).load(function() {
-    var $form = $('#peeps-picker form');
-
     init();
     $('#peeps-message').hide();
 
     // Match form.
-    $form.on('submit', function (e) {
+    $pickerForm.on('submit', function (e) {
       $.when(processData()).then(function(data) {
         showPeeps(data);
         $('#peeps-message').show();
 
+        createQuickLink(data);
         //makeCharts();
       });
       $(this).addClass('isCollapsed');
       e.preventDefault();
     });
-    $form.on('click', function () {
-      if ($form.hasClass('isCollapsed')) $form.toggleClass('isCollapsed');
+    $pickerForm.on('click', function () {
+      if ($pickerForm.hasClass('isCollapsed')) $pickerForm.toggleClass('isCollapsed');
     });
     $('#peeps-picker__opener').on('click', function(e) {
       e.preventDefault();
     });
 
     // Reset.
-    $form.on('reset', function () {
+    $pickerForm.on('reset', function () {
       $(this).find('input:checkbox').removeAttr('checked');
       $(this).garlic('destroy');
       $('#peeps-message').hide();
