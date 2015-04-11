@@ -123,9 +123,11 @@ ul {
   margin-left: 150px;
 }
 
-.peeps-picker li {
+.peeps-picker li.peeps-picker__skill {
   float: left;
-  margin: 0 2em 1em 0;
+  margin: 0 2% 1em 0;
+  width: 31%;
+  font-size: 0.75em;
 }
 label.peeps-picker__checkbox-label {
   margin-left: -4px;
@@ -143,7 +145,8 @@ input.peeps-picker__checkbox {
   *overflow: hidden;
 }
 .peeps-picker__checkbox:checked + .peeps-picker__label {
-  color: #bbb;
+  color: #999;
+  background: #F9F43C;
 }
 .peeps-picker__button {
   background: #F568E3;
