@@ -129,6 +129,17 @@ ul {
   width: 31%;
   font-size: 0.75em;
 }
+@media screen and ( max-width: 768px ) {
+  .peeps-picker li.peeps-picker__skill {
+    width: 48%;
+  }
+}
+@media screen and ( max-width: 480px ) {
+  .peeps-picker li.peeps-picker__skill {
+    width: 98%;
+  }
+}
+
 label.peeps-picker__checkbox-label {
   margin-left: -4px;
   color: #666;
