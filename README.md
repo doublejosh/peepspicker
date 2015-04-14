@@ -8,6 +8,9 @@ Peeps could work on everything, this helps you pick when.  No matter your proces
 ## [Demo](http://doublejosh.github.io/peepspicker)
 If you just want a quick demo, the tool will fill in fake data.  Pick a number of helpers and a few required skills for the project. Click "whom" and you'll get matched results and provide a quick email starter.
 
+- [Example set #1 - web dev team](http://doublejosh.github.io/peepspicker)
+- [Example set #2 - design team](http://doublejosh.github.io/peepspicker/#?peeps=eb5e3b50c1e81a7d775d%2C+1508ae40a6dcf601c04c%2C+d3005c75007bec0fe2c6&skills=be0de9916f5d7d5f7072)
+
 ## Use Your Data
 To use this tool with your group, you'll need to create several [gists](https://gist.github.com) to represent your data.
 
