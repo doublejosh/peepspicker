@@ -4,8 +4,7 @@
  */
 (function($, _) {
 
-  var templates = {},
-      favSkillsMulti = 1,
+  var favSkillsMulti = 1,
       intSkillsMulti = 0.5,
       randomizer = false,
       //urlPrefix = 'mock-data/',
@@ -23,63 +22,6 @@
         skillList: $('#template-listskill').html()
       },
       $pickerForm = $('#peeps-picker form');
-
-
-  /**
-   * Build the form from configs.
-   */
-  function init() {
-    var skillsGid = grabSkills(),
-        peepGids = grabPeeps();
-
-
-    // Compile all the templates.
-    for (var t in templates) Mustache.parse(t);
-
-    // Shove params into form.
-    if (getUrlParam('peeps')) {
-      $pickerForm.find('#people').val(getUrlParam('peeps').replace('/',''));
-    }
-    if (getUrlParam('skills')) {
-      $pickerForm.find('#skills-source').val(getUrlParam('skills').replace('/',''));
-    }
-
-    // Use garlic saved skills.
-    $.when(getGistYAML(skillsGid)).then(function (data) {
-      $('#skills').html(
-        Mustache.render(templates.skillForm, {skills: data})
-      ).parents('form').garlic();
-    });
-
-    // Use garlic saved peeps.
-    $.when(getPeople(peepGids)).then(function(peeps) {
-      showPeeps(peeps.sort(function() {
-        return (Math.round(Math.random()) - 0.5);
-      }));
-    });
-  }
-
-
-  /**
-   * Get people list form wherever is appropriate.
-   *
-   * @return {array}
-   */
-  function grabPeeps() {
-    var stashedPeeps = $pickerForm.find('#people').val() || getUrlParam('peeps');
-    return (stashedPeeps) ? stashedPeeps.replace('/','').split(/[ ,]+/) : [];
-  }
-
-
-  /**
-   * Get people list form wherever is appropriate.
-   *
-   * @return {array}
-   */
-  function grabSkills() {
-    var stashedSkills = $pickerForm.find('#skills-source').val() || getUrlParam('skills');
-    return stashedSkills || exampleSkills;
-  }
 
 
   /**
@@ -128,24 +70,84 @@
 
 
   /**
+   * Build the form from configs.
+   */
+  function init() {
+    var skillsGid = grabSkills(),
+        peepGids = grabPeeps();
+
+    // Compile all templates.
+    for (var t in templates) Mustache.parse(t);
+
+    // Handle people.
+    $.when(getPeople(peepGids)).then(function(peeps) {
+      showPeeps(peeps.sort(function() {
+        return (Math.round(Math.random()) - 0.5);
+      }));
+    });
+
+    // Handle skills.
+    $.when(getGistYAML(skillsGid)).then(function (data) {
+      $('#skills').html(
+        Mustache.render(templates.skillForm, {skills: data})
+      ).parents('form').garlic();
+    });
+  }
+
+
+  /**
+   * Get people list form wherever is appropriate.
+   *
+   * @param {boolean} returnString
+   * @return {array|string}
+   */
+  function grabPeeps(returnString) {
+    var urlPeeps = getUrlParam('peeps') || '';
+        peeps = $pickerForm.find('#people').val() || urlPeeps.replace('/','');
+
+    $pickerForm.find('#people').val(peeps);
+
+    if (peeps) {
+      return (returnString === undefined) ? peeps.split(/[ ,]+/) : peeps;
+    }
+    else {
+      return exampleProfiles;
+    }
+  }
+
+
+  /**
+   * Get people list form wherever is appropriate.
+   *
+   * @return {array}
+   */
+  function grabSkills() {
+    var urlSkills = getUrlParam('skills') || '';
+        skills = $pickerForm.find('#skills-source').val() || urlSkills.replace('/','');
+
+    $pickerForm.find('#skills-source').val(skills);
+
+    return skills || exampleSkills;
+  }
+
+
+  /**
    * Create a quick link to this set of data.
    *
    * @param {array} data
    */
   function createQuickLink(data) {
-    var peepsValue = $pickerForm.find('#people').val(),
-        skillsValue = $pickerForm.find('#skills-source').val(),
-        params = {};
-
-    if (peepsValue) params.peeps = peepsValue;
-    if (skillsValue) params.skills = skillsValue;
+    var params = {
+      peeps: data.hasOwnProperty('people') ? data.people.join() : '',
+      skills: data.hasOwnProperty('skills') ? data.skills.join() : ''
+    };
 
     $('.peeps-picker__quick-link').remove();
     $('#peeps-picker form').append(
       $('<h3>', {class: 'peeps-picker__quick-link'}).append(
         $('<a>', {
           html: 'Quick link to this data',
-          href: window.location + '?' + $.param(params),
+          href: window.location + '?' + decodeURIComponent($.param(params)),
     })));
   }
 
@@ -301,6 +303,7 @@
           case 'text':
           case 'TEXTAREA':
           case 'SELECT':
+          case 'range':
             data[elmName] = $(this).val();
             break;
 
@@ -364,8 +367,9 @@
         // Sort matches and send back.
         sortedPeeps = _.sortBy(peeps, 'chance').reverse();
 
-        // @todo Always randomize among equal values.
-        deferred.resolve(sortedPeeps.slice(0, data.number));
+console.log(data);
+
+        deferred.resolve(sortedPeeps.slice(0, data.size));
       });
     });
 
@@ -395,6 +399,21 @@
     });
     $('#peeps-picker__opener').on('click', function(e) {
       e.preventDefault();
+    });
+
+    // Size.
+    $('#peeps-picker-size').on('input change', function() {
+      var toolTips = {
+        1: 'Just <strong>One</strong>',
+        2: 'Tidy <strong>Pair</strong>',
+        3: '<strong>Tr&egrave;s</strong> Amigos',
+        4: '<strong>Four</strong> Horsemen',
+        5: '<strong>Five</strong> Wizards',
+        6: 'Seriously <strong>Six!</strong>',
+        7: '<strong>7777777</strong>',
+        8: 'Qua? <strong>Eight</strong>'
+      };
+      $('.peeps-picker__size .peeps-picker__desc').html(toolTips[$(this).val()]);
     });
 
     // Reset.

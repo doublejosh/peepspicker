@@ -5,6 +5,8 @@ Peeps Picker Pro 9000!
 
 Peeps could work on everything, this helps you pick when.  No matter your process, you have new projects and people who will need to work on them.  Easily find evenyone's best matches, everytime!
 
+_Currently only tested in Chrome._
+
 ## [Demo](http://doublejosh.github.io/peepspicker)
 If you just want a quick demo, the tool will fill in fake data.  Pick a number of helpers and a few required skills for the project. Click "whom" and you'll get matched results and provide a quick email starter.
 

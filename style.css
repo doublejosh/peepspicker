@@ -98,8 +98,24 @@ ul {
 }
 .peeps-picker__form-element {
   margin: 1em 0;
+  border-top: 1px solid #eee;
+  padding-top: 1em;
+  overflow: hidden;
 }
-.peeps-picker__basics label {
+.peeps-picker__size {
+  border-top: none;
+  padding-top: 0;
+}
+
+.peeps-picker__radios {
+  overflow: hidden;
+  font-size: 0.75em;
+}
+.peeps-picker__radios li {
+   float: left;
+   margin: 0 1em 1em 0;
+}
+.peeps-picker__basics label.peeps-picker__element-label {
   width: 150px;
   display: block;
   float: left;
@@ -201,7 +217,7 @@ h3.peeps-list__name {
 }
 
 /* Footer */
-.footer{
+.peeps-footer {
   font-size: 0.75em;
   color: #999;
 }

@@ -1,8 +1,9 @@
 <html>
 <head>
   <title>Peeps Picker Pro 9000: hyper-agile, rapid-scrum, synergy-acracy engine</title>
-  <link href='style.css' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
+  <link href="style.css" rel="stylesheet">
+  <link href="//fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <link href="//rawgit.com/andreruffert/rangeslider.js/master/dist/rangeslider.css" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -20,22 +21,14 @@
       <fieldset class="peeps-picker__basics">
         <legend>Basics</legend>
 
-        <div class="peeps-picker__form-element">
-          <label for="number" class="peeps-picker__label">Number</label>
-          <select id="number" name="number" class="peeps-picker__select">
-            <option value="1">1 - Just One</option>
-            <option value="2">2 - Tidy Pair</option>
-            <option value="3">3 - Tres Amigos</option>
-            <option value="4">4 - Four Horsemen</option>
-            <option value="5">5 - Five Wizards</option>
-            <option value="6">6 - Geez Six!</option>
-            <option value="7">7 - 7777</option>
-            <option value="8">8-  Qua? Eight!</option>
-          </select>
+        <div class="peeps-picker__form-element  peeps-picker__size">
+          <label for="peeps-picker-size" class="peeps-picker__label peeps-picker__element-label">Number</label>
+          <input type="range" id="peeps-picker-size" name="size" class="peeps-picker__size" min="1" max="8" step="1" value="3">
+          <span class="peeps-picker__desc"><strong>Tr&egrave;s</strong> Amigos by default</span>
         </div>
 
         <div class="peeps-picker__form-element">
-          <label for="skills-source" class="peeps-picker__label">Skills</label>
+          <label for="skills-source" class="peeps-picker__label peeps-picker__element-label">Skills</label>
           <input type="text" id="skills-source" name="skills-source" class="peeps-picker__text" placeholder=""><br>
           <span class="peeps-picker__desc">
             GitHub gist ID, eg: https://gist.github.com/doublejosh/<strong>158c42f68ebd2f6bf628</strong><br>
@@ -44,7 +37,7 @@
         </div>
 
         <div class="peeps-picker__form-element">
-          <label for="people" class="peeps-picker__label">People</label>
+          <label for="people" class="peeps-picker__label peeps-picker__element-label">People</label>
           <input type="text" id="people" name="people" class="peeps-picker__text" placeholder="55555555555555555555, 99999999999999999999"><br>
           <span class="peeps-picker__desc">
             Comma separated GitHub gist IDs, eg: https://gist.github.com/doublejosh/<strong>8cb86c13726d5339146e</strong><br>
@@ -53,7 +46,7 @@
         </div>
 
         <div class="peeps-picker__form-element peeps-picker__randomizer">
-          <label for="randomizer" class="peeps-picker__label">Random</label>
+          <label for="randomizer" class="peeps-picker__label peeps-picker__element-label">Random</label>
           <input type="checkbox" id="randomizer" name="randomizer" value="1" class="peeps-picker__checkbox"> Sprinkles
         </div>
       </fieldset>
@@ -96,17 +89,18 @@
     </form>
   </section>
 
-  <section id="footer" class="footer">
+  <section class="peeps-footer">
     <p>Peeps could work on everything, this helps you pick when.</p>
     <a href="http://www.twitter.com/nerdtapas" title="@nerdtapas on Twitter">@nerdtapas</a> |
     <a href="https://github.com/doublejosh/peepspicker" alt="peepspicker on GitHub">github/peepspicker</a>
   </section>
 
+
   <script id="template-skills" type="x-tmpl-mustache">
     {{ #skills }}
     <li class="peeps-picker__skill">
-      <input type="checkbox" name="skills" value="{{ key }}" id="skills-sid-{{ key }}" class="peeps-picker__checkbox">
-      <label for="skills-sid-{{ key }}" class="peeps-picker__label peeps-picker__checkbox-label">{{ value }}</label>
+      <input type="checkbox" name="skills" value="{{ key }}" id="skills-id-{{ key }}" class="peeps-picker__checkbox">
+      <label for="skills-id-{{ key }}" class="peeps-picker__label peeps-picker__checkbox-label">{{ value }}</label>
     </li>
     {{ /skills }}
   </script>
@@ -130,6 +124,7 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/js-yaml/3.2.7/js-yaml.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/garlic.js/1.2.2/garlic.min.js"></script>
+  <script src="//rawgit.com/andreruffert/rangeslider.js/master/dist/rangeslider.min.js"></script>
   <script src="main.js"></script>
 
 </body>
